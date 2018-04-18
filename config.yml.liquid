@@ -1,0 +1,22 @@
+in:
+  type: s3
+  bucket: {{ env.S3BUCKET }}
+  path_prefix: applications/{{ env.MET_SERVICE }}/audit/{{ env.YEAR }}/{{ env.MONTH }}/{{ env.DAY }}
+  path_match_patterns: \.gz$
+  auth_method: instance
+  endpoint: s3-ap-northeast-1.amazonaws.com
+  parser:
+    type: jsonl
+    newline: LF
+    columns:
+      - {name: "timestamp", type: "timestamp", format: '%Y-%m-%dT%H:%M:%S.%L000%z'}
+      - {name: "mdc", type: "string" }
+      - {name: "message", type: "string" }
+  decoders:
+    - { type: gzip }
+out:
+  type: td
+  endpoint: api.treasuredata.com
+  apikey:   {{ env.TDAPIKEY }}
+  database: {{ env.TDDATABASE }}
+  table:    {{ env.TDTABLE }}
