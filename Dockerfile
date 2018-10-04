@@ -1,4 +1,4 @@
-FROM takipone/embulk:latest
+FROM classmethod/embulk:latest
  
 RUN /embulk/embulk gem install embulk-input-s3 embulk-parser-jsonl embulk-output-td
  
